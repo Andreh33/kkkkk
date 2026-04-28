@@ -1,9 +1,11 @@
 export const dynamic = "force-dynamic";
 
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import { prisma } from "@/lib/db";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "Servicios — Admin" };
@@ -20,7 +22,12 @@ export default async function AdminServiciosPage() {
 
   return (
     <div>
-      <h1 className="font-display text-3xl text-[var(--text-strong)] mb-6">Servicios</h1>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="font-display text-3xl text-[var(--text-strong)]">Servicios</h1>
+        <Button asChild size="sm">
+          <Link href="/admin/servicios/nuevo">Nuevo servicio</Link>
+        </Button>
+      </div>
       <div className="bg-[var(--bg-white)] rounded-xl border border-[var(--line)] overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
@@ -36,7 +43,11 @@ export default async function AdminServiciosPage() {
             <tbody className="divide-y divide-[var(--line)]">
               {services.map((s) => (
                 <tr key={s.id} className="hover:bg-[var(--bg-cream)] transition-colors">
-                  <td className="px-4 py-3 font-medium text-[var(--text-base)]">{s.name}</td>
+                  <td className="px-4 py-3">
+                    <Link href={`/admin/servicios/${s.id}`} className="font-medium text-[var(--text-base)] hover:text-[var(--gold-700)] transition-colors">
+                      {s.name}
+                    </Link>
+                  </td>
                   <td className="px-4 py-3 text-[var(--text-soft)]">{CATEGORY_LABELS[s.category] ?? s.category}</td>
                   <td className="px-4 py-3 text-[var(--text-strong)] font-semibold">{formatPrice(s.priceMin)}</td>
                   <td className="px-4 py-3 text-[var(--text-soft)]">{s.durationMin} min</td>

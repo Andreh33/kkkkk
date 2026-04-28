@@ -6,6 +6,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { LineDivider } from "@/components/decor/LineDivider";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { SITE } from "@/lib/constants";
 import { prisma } from "@/lib/db";
 import { formatDate } from "@/lib/utils";
 
@@ -39,8 +41,29 @@ export default async function BlogPostPage({ params }: Props) {
   const post = await getPost(slug);
   if (!post) notFound();
 
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.excerpt,
+    datePublished: post.publishedAt?.toISOString() ?? post.createdAt.toISOString(),
+    dateModified: post.updatedAt.toISOString(),
+    author: { "@type": "Person", name: post.author },
+    publisher: {
+      "@type": "Organization",
+      name: SITE.name,
+      url: SITE.url,
+    },
+    image: post.coverImage ? [post.coverImage] : undefined,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `${SITE.url}/blog/${post.slug}`,
+    },
+  };
+
   return (
     <div className="pt-20">
+      <JsonLd data={articleSchema} />
       {/* Hero */}
       {post.coverImage && (
         <div className="relative h-64 sm:h-96 overflow-hidden">
