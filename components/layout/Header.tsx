@@ -45,7 +45,7 @@ export function Header() {
         "fixed top-0 left-0 right-0 z-40 transition-all duration-300",
         scrolled
           ? "bg-[var(--bg-white)]/95 backdrop-blur-md shadow-sm border-b border-[var(--line)]"
-          : "bg-transparent"
+          : "bg-[var(--bg-white)]/80 backdrop-blur-sm"
       )}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16 md:h-20">
@@ -56,10 +56,7 @@ export function Header() {
             alt="Forma y Línea Ciudad Real"
             width={160}
             height={45}
-            className={cn(
-              "h-10 md:h-14 w-auto object-contain transition-all duration-300",
-              !scrolled && "brightness-0 invert"
-            )}
+            className="h-10 md:h-14 w-auto object-contain transition-all duration-300"
             priority
           />
         </Link>
@@ -70,12 +67,7 @@ export function Header() {
             <div key={link.href} className="relative group">
               <Link
                 href={link.href}
-                className={cn(
-                  "text-sm font-medium tracking-wide transition-colors duration-200",
-                  scrolled
-                    ? "text-[var(--text-base)] hover:text-[var(--gold-700)]"
-                    : "text-white hover:text-[var(--gold-300)]"
-                )}
+                className="text-sm font-medium tracking-wide transition-colors duration-200 text-[var(--text-strong)] hover:text-[var(--gold-700)]"
               >
                 {link.label}
               </Link>
@@ -103,24 +95,14 @@ export function Header() {
           <Link
             href="/mi-cuenta"
             aria-label="Mi cuenta"
-            className={cn(
-              "p-2 rounded-full transition-colors duration-200 touch-target flex items-center justify-center",
-              scrolled
-                ? "text-[var(--text-base)] hover:text-[var(--gold-700)] hover:bg-[var(--bg-deep)]"
-                : "text-white hover:text-[var(--gold-300)]"
-            )}
+            className="p-2 rounded-full transition-colors duration-200 touch-target flex items-center justify-center text-[var(--text-strong)] hover:text-[var(--gold-700)] hover:bg-[var(--bg-deep)]"
           >
             <User className="h-5 w-5" />
           </Link>
           <Link
             href="/carrito"
             aria-label={`Carrito (${cartCount} productos)`}
-            className={cn(
-              "relative p-2 rounded-full transition-colors duration-200 touch-target flex items-center justify-center",
-              scrolled
-                ? "text-[var(--text-base)] hover:text-[var(--gold-700)] hover:bg-[var(--bg-deep)]"
-                : "text-white hover:text-[var(--gold-300)]"
-            )}
+            className="relative p-2 rounded-full transition-colors duration-200 touch-target flex items-center justify-center text-[var(--text-strong)] hover:text-[var(--gold-700)] hover:bg-[var(--bg-deep)]"
           >
             <ShoppingBag className="h-5 w-5" />
             {cartCount > 0 && (
@@ -134,12 +116,7 @@ export function Header() {
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
             <SheetTrigger asChild>
               <button
-                className={cn(
-                  "lg:hidden p-2 rounded-full touch-target flex items-center justify-center transition-colors",
-                  scrolled
-                    ? "text-[var(--text-base)] hover:bg-[var(--bg-deep)]"
-                    : "text-white hover:text-[var(--gold-300)]"
-                )}
+                className="lg:hidden p-2 rounded-full touch-target flex items-center justify-center transition-colors text-[var(--text-strong)] hover:bg-[var(--bg-deep)]"
                 aria-label="Abrir menú"
               >
                 <Menu className="h-5 w-5" />
