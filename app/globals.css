@@ -1,0 +1,174 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Neutros cálidos */
+    --bg-base: #F7F3EC;
+    --bg-cream: #FBF7F0;
+    --bg-white: #FFFDF9;
+    --bg-deep: #EDE5D6;
+
+    /* Verde sage */
+    --sage-50: #EEF2EA;
+    --sage-100: #DCE4D5;
+    --sage-300: #A9B89A;
+    --sage-500: #7B8F6B;
+    --sage-700: #4F6342;
+
+    /* Dorado champagne */
+    --gold-300: #D9C29A;
+    --gold-500: #B89968;
+    --gold-700: #8C6F46;
+
+    /* Texto */
+    --text-strong: #2A2622;
+    --text-base: #3F3A33;
+    --text-soft: #76695B;
+    --text-mute: #A89D8C;
+
+    /* Funcionales */
+    --line: #E5DCC9;
+    --success: #6F8F5B;
+    --danger: #B0594B;
+    --warning: #C99B5C;
+
+    /* shadcn/ui tokens — mapped to our palette */
+    --background: 43 33% 95%;
+    --foreground: 25 10% 16%;
+    --card: 40 33% 98%;
+    --card-foreground: 25 10% 16%;
+    --popover: 40 33% 98%;
+    --popover-foreground: 25 10% 16%;
+    --primary: 36 35% 57%;
+    --primary-foreground: 25 10% 98%;
+    --secondary: 43 25% 90%;
+    --secondary-foreground: 25 10% 25%;
+    --muted: 43 20% 90%;
+    --muted-foreground: 30 12% 47%;
+    --accent: 43 25% 90%;
+    --accent-foreground: 25 10% 16%;
+    --destructive: 5 40% 49%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 40 28% 84%;
+    --input: 40 28% 84%;
+    --ring: 36 35% 57%;
+    --radius: 0.5rem;
+
+    /* Chart colors */
+    --chart-1: 36 35% 57%;
+    --chart-2: 100 16% 49%;
+    --chart-3: 25 10% 25%;
+    --chart-4: 40 33% 80%;
+    --chart-5: 100 24% 40%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-[var(--bg-base)] text-[var(--text-base)] font-body antialiased;
+    font-feature-settings: "kern" 1, "liga" 1;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display text-[var(--text-strong)];
+    font-feature-settings: "kern" 1, "liga" 1, "swsh" 1;
+  }
+
+  /* Focus ring — dorado accesible */
+  :focus-visible {
+    outline: 2px solid var(--gold-500);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* Scroll suave */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Respetar preferencia de movimiento reducido */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+@layer utilities {
+  /* Tipografía fluida */
+  .text-display-xl {
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+  .text-display-lg {
+    font-size: clamp(2rem, 4.5vw, 3.75rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+  .text-display-md {
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+  .text-display-sm {
+    font-size: clamp(1.25rem, 2.5vw, 2rem);
+    line-height: 1.25;
+  }
+
+  .text-body-lg {
+    font-size: clamp(1.0625rem, 1.5vw, 1.25rem);
+    line-height: 1.7;
+  }
+  .text-body {
+    font-size: clamp(0.9375rem, 1.2vw, 1.0625rem);
+    line-height: 1.7;
+  }
+  .text-body-sm {
+    font-size: clamp(0.8125rem, 1vw, 0.9375rem);
+    line-height: 1.6;
+  }
+
+  /* Itálica decorativa */
+  .text-accent-italic {
+    @apply font-display italic;
+    color: var(--gold-700);
+  }
+
+  /* Separador botánico */
+  .botanical-divider {
+    @apply flex items-center gap-4 my-8;
+  }
+  .botanical-divider::before,
+  .botanical-divider::after {
+    content: "";
+    @apply flex-1 border-t border-[var(--line)];
+  }
+
+  /* Botones mínimos táctiles */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Gradiente beige sutil */
+  .bg-gradient-warm {
+    background: linear-gradient(135deg, var(--bg-cream) 0%, var(--bg-base) 100%);
+  }
+
+  /* Overlay de vídeo hero */
+  .hero-overlay {
+    background: rgba(42, 38, 34, 0.35);
+  }
+}
