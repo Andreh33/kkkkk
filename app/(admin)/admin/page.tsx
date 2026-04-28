@@ -8,6 +8,10 @@ import { formatPrice } from "@/lib/utils";
 async function getDashboardKPIs() {
   const now = new Date();
   const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const startOfDay = new Date(now);
+  startOfDay.setHours(0, 0, 0, 0);
+  const endOfDay = new Date(now);
+  endOfDay.setHours(23, 59, 59, 999);
 
   const [
     monthRevenue,
@@ -24,10 +28,7 @@ async function getDashboardKPIs() {
     prisma.order.count({ where: { status: "PENDING" } }),
     prisma.appointment.count({
       where: {
-        startsAt: {
-          gte: new Date(now.setHours(0, 0, 0, 0)),
-          lt: new Date(now.setHours(23, 59, 59, 999)),
-        },
+        startsAt: { gte: startOfDay, lt: endOfDay },
         status: { notIn: ["CANCELLED"] },
       },
     }),

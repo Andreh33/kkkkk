@@ -12,11 +12,11 @@ export default auth((req) => {
   if (pathname.startsWith("/admin")) {
     if (!session) {
       return NextResponse.redirect(
-        new URL(`/login?callbackUrl=${encodeURIComponent(pathname)}`, req.url)
+        new URL(`/admin-login?callbackUrl=${encodeURIComponent(pathname)}`, req.url)
       );
     }
     if (session.user.role !== "ADMIN") {
-      return NextResponse.redirect(new URL("/", req.url));
+      return NextResponse.redirect(new URL("/admin-login?error=forbidden", req.url));
     }
   }
 
