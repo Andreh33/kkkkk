@@ -6,6 +6,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { DeleteServiceButton } from "@/components/admin/DeleteServiceButton";
 import { formatPrice } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "Servicios — Admin" };
@@ -38,6 +39,7 @@ export default async function AdminServiciosPage() {
                 <th className="text-left px-4 py-3 text-[var(--text-soft)] font-medium">Precio</th>
                 <th className="text-left px-4 py-3 text-[var(--text-soft)] font-medium">Duración</th>
                 <th className="text-left px-4 py-3 text-[var(--text-soft)] font-medium">Reservable</th>
+                <th className="text-right px-4 py-3 text-[var(--text-soft)] font-medium">Acciones</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[var(--line)]">
@@ -55,6 +57,17 @@ export default async function AdminServiciosPage() {
                     <Badge variant={s.bookable ? "sage" : "secondary"}>
                       {s.bookable ? "Sí" : "No"}
                     </Badge>
+                  </td>
+                  <td className="px-4 py-3 text-right">
+                    <div className="inline-flex items-center gap-1">
+                      <Link
+                        href={`/admin/servicios/${s.id}`}
+                        className="text-xs text-[var(--gold-700)] hover:underline px-2 py-1 rounded"
+                      >
+                        Editar
+                      </Link>
+                      <DeleteServiceButton id={s.id} name={s.name} />
+                    </div>
                   </td>
                 </tr>
               ))}

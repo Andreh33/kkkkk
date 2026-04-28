@@ -48,7 +48,9 @@
       "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} servicios admin \\(sin sesion -> 307\\)\\\\n\" https://formaylinea.vercel.app/admin/servicios/nuevo)",
       "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} uploadthing api\\\\n\" https://formaylinea.vercel.app/api/uploadthing)",
       "Bash(npx vitest *)",
-      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} blog\\\\n\" https://formaylinea.vercel.app/blog)"
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} blog\\\\n\" https://formaylinea.vercel.app/blog)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} admin-login\\\\n\" https://formaylinea.vercel.app/admin-login)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}+location:%{redirect_url} /admin \\(sin sesion\\)\\\\n\" https://formaylinea.vercel.app/admin)"
     ]
   }
 }

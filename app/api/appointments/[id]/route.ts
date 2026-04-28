@@ -61,3 +61,29 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   if (!appointment) return NextResponse.json({ error: "Not found" }, { status: 404 });
   return NextResponse.json({ appointment });
 }
+
+export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const session = await auth();
+  if (!session?.user || session.user.role !== "ADMIN") {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
+  const { id } = await params;
+  const appointment = await prisma.appointment.findUnique({ where: { id } });
+  if (!appointment) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+  // Free the credit (if linked) so the customer can rebook
+  await prisma.$transaction([
+    prisma.appointment.delete({ where: { id } }),
+    ...(appointment.creditId
+      ? [
+          prisma.serviceCredit.update({
+            where: { id: appointment.creditId },
+            data: { redeemed: false },
+          }),
+        ]
+      : []),
+  ]);
+
+  return NextResponse.json({ ok: true });
+}

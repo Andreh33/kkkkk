@@ -42,13 +42,27 @@ export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ 
   }
 
   const { id } = await params;
-  try {
-    await prisma.service.delete({ where: { id } });
-    return NextResponse.json({ ok: true });
-  } catch {
-    return NextResponse.json(
-      { error: "No se puede eliminar: el servicio tiene citas o pedidos asociados. Márcalo como inactivo en su lugar." },
-      { status: 400 }
-    );
+  // If there are appointments/orders linked, soft-delete (mark inactive + non-bookable) instead
+  const inUse = await prisma.service.findUnique({
+    where: { id },
+    select: {
+      _count: { select: { appointments: true, orderItems: true, serviceCredits: true } },
+    },
+  });
+  if (!inUse) {
+    return NextResponse.json({ error: "Servicio no encontrado" }, { status: 404 });
   }
+  const hasRefs =
+    inUse._count.appointments + inUse._count.orderItems + inUse._count.serviceCredits > 0;
+
+  if (hasRefs) {
+    await prisma.service.update({
+      where: { id },
+      data: { active: false, bookable: false },
+    });
+    return NextResponse.json({ ok: true, softDeleted: true });
+  }
+
+  await prisma.service.delete({ where: { id } });
+  return NextResponse.json({ ok: true });
 }
