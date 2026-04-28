@@ -1,10 +1,10 @@
 "use client";
 
-import { Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
+import { ImageUpload } from "@/components/admin/ImageUpload";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -52,7 +52,6 @@ export function ServiceForm({ service }: ServiceFormProps) {
   );
   const [durationMin, setDurationMin] = useState(String(service?.durationMin ?? 60));
   const [images, setImages] = useState<string[]>(service?.images ?? []);
-  const [imageInput, setImageInput] = useState("");
   const [bookable, setBookable] = useState(service?.bookable ?? true);
   const [active, setActive] = useState(service?.active ?? true);
   const [saving, setSaving] = useState(false);
@@ -60,17 +59,6 @@ export function ServiceForm({ service }: ServiceFormProps) {
   function autoSlug(value: string) {
     setName(value);
     if (!isEdit) setSlug(slugify(value));
-  }
-
-  function addImage() {
-    const url = imageInput.trim();
-    if (!url) return;
-    if (!/^https?:\/\//.test(url)) {
-      toast.error("La URL debe empezar por http:// o https://");
-      return;
-    }
-    setImages([...images, url]);
-    setImageInput("");
   }
 
   async function save() {
@@ -191,40 +179,7 @@ export function ServiceForm({ service }: ServiceFormProps) {
 
         <div className="bg-[var(--bg-white)] border border-[var(--line)] rounded-xl p-5">
           <h3 className="font-medium text-[var(--text-strong)] mb-3">Imágenes</h3>
-          <div className="flex gap-2">
-            <Input
-              value={imageInput}
-              onChange={(e) => setImageInput(e.target.value)}
-              placeholder="URL de la imagen"
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  addImage();
-                }
-              }}
-            />
-            <Button type="button" onClick={addImage} variant="outline">
-              Añadir
-            </Button>
-          </div>
-          {images.length > 0 && (
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-4">
-              {images.map((url, idx) => (
-                <div key={idx} className="relative group rounded-md overflow-hidden bg-[var(--bg-deep)] aspect-square">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={url} alt="" className="w-full h-full object-cover" />
-                  <button
-                    type="button"
-                    onClick={() => setImages(images.filter((_, i) => i !== idx))}
-                    className="absolute top-1 right-1 p-1.5 rounded-full bg-black/60 text-white opacity-0 group-hover:opacity-100 transition-opacity"
-                    aria-label="Eliminar"
-                  >
-                    <Trash2 className="h-3.5 w-3.5" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
+          <ImageUpload images={images} onChange={setImages} multiple />
         </div>
       </div>
 

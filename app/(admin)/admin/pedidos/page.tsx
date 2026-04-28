@@ -1,6 +1,7 @@
 export const dynamic = "force-dynamic";
 
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import { prisma } from "@/lib/db";
 import { formatDate, formatPrice } from "@/lib/utils";
@@ -41,8 +42,13 @@ export default async function AdminPedidosPage() {
             <tbody className="divide-y divide-[var(--line)]">
               {orders.map((order) => (
                 <tr key={order.id} className="hover:bg-[var(--bg-cream)] transition-colors">
-                  <td className="px-4 py-3 text-[var(--text-mute)] font-mono text-xs">
-                    {order.id.slice(-8)}
+                  <td className="px-4 py-3">
+                    <Link
+                      href={`/admin/pedidos/${order.id}`}
+                      className="text-[var(--gold-700)] hover:underline font-mono text-xs"
+                    >
+                      {order.id.slice(-8)}
+                    </Link>
                   </td>
                   <td className="px-4 py-3 text-[var(--text-base)]">{order.user.name}</td>
                   <td className="px-4 py-3 font-semibold text-[var(--text-strong)]">

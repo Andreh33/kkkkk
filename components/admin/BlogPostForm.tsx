@@ -5,6 +5,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 import { BlogEditor } from "@/components/admin/BlogEditor";
+import { ImageUpload } from "@/components/admin/ImageUpload";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -189,21 +190,12 @@ export function BlogPostForm({ post }: BlogPostFormProps) {
           </div>
 
           <div className="bg-[var(--bg-white)] border border-[var(--line)] rounded-xl p-5">
-            <h3 className="font-medium text-[var(--text-strong)] mb-4">Imagen de portada</h3>
-            <Label htmlFor="cover">URL de la imagen</Label>
-            <Input
-              id="cover"
-              value={coverImage}
-              onChange={(e) => setCoverImage(e.target.value)}
-              placeholder="https://..."
-              className="mt-1"
+            <h3 className="font-medium text-[var(--text-strong)] mb-3">Imagen de portada</h3>
+            <ImageUpload
+              images={coverImage ? [coverImage] : []}
+              onChange={(imgs) => setCoverImage(imgs[0] ?? "")}
+              multiple={false}
             />
-            {coverImage && (
-              <div className="mt-3 relative aspect-video rounded-md overflow-hidden bg-[var(--bg-deep)]">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={coverImage} alt="Portada" className="w-full h-full object-cover" />
-              </div>
-            )}
           </div>
         </aside>
       </div>

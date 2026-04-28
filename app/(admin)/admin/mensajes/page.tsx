@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 
 import { prisma } from "@/lib/db";
 import { Badge } from "@/components/ui/badge";
+import { MessageActions } from "@/components/admin/MessageActions";
 import { formatDate } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "Mensajes — Admin" };
@@ -47,7 +48,16 @@ export default async function AdminMensajesPage() {
                   Asunto: {msg.subject}
                 </p>
               )}
-              <p className="text-sm text-[var(--text-soft)] whitespace-pre-wrap">{msg.message}</p>
+              <p className="text-sm text-[var(--text-soft)] whitespace-pre-wrap mb-4">{msg.message}</p>
+              <div className="flex items-center justify-between border-t border-[var(--line)] pt-3 mt-3">
+                <a
+                  href={`mailto:${msg.email}?subject=Re: ${encodeURIComponent(msg.subject ?? "Tu consulta")}`}
+                  className="text-xs text-[var(--gold-700)] hover:underline"
+                >
+                  Responder por email →
+                </a>
+                <MessageActions id={msg.id} read={msg.read} />
+              </div>
             </div>
           ))
         )}
