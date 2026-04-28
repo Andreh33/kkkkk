@@ -1,6 +1,7 @@
 import crypto from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 
+import PasswordResetEmail from "@/emails/PasswordResetEmail";
 import { prisma } from "@/lib/db";
 import { getResend, EMAIL_FROM } from "@/lib/email";
 import { forgotPasswordSchema } from "@/lib/schemas/auth";
@@ -31,7 +32,7 @@ export async function POST(req: NextRequest) {
         from: EMAIL_FROM,
         to: email,
         subject: "Restablece tu contraseña — Forma y Línea",
-        text: `Hola ${user.name},\n\nHaz clic en el siguiente enlace para restablecer tu contraseña:\n${resetUrl}\n\nEste enlace expira en 30 minutos.\n\nSi no solicitaste este cambio, ignora este correo.\n\nForma y Línea Ciudad Real`,
+        react: PasswordResetEmail({ name: user.name ?? "", resetUrl }),
       });
     }
 

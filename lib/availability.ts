@@ -1,7 +1,12 @@
-import { addMinutes, format, isAfter, isBefore, parseISO, setHours, setMinutes, startOfDay } from "date-fns";
+import { addMinutes, format, isAfter, isBefore, setHours, setMinutes, startOfDay } from "date-fns";
 
 import { prisma } from "@/lib/db";
 import { BOOKING, SCHEDULE } from "@/lib/constants";
+
+interface BookedSlot {
+  startsAt: Date;
+  endsAt: Date;
+}
 
 function timeToMinutes(time: string): number {
   const [h, m] = time.split(":").map(Number);
@@ -20,33 +25,33 @@ function slotStart(date: Date, timeStr: string): Date {
   return setMinutes(setHours(d, h), m);
 }
 
-export async function getAvailableSlots(
-  date: Date,
-  durationMin: number
-): Promise<string[]> {
+/**
+ * Pure function: given the day, duration and list of booked appointments,
+ * returns the array of "HH:mm" slots that are still available.
+ *
+ * Exposed separately so it's unit-testable without hitting the DB.
+ */
+export function computeAvailableSlots({
+  date,
+  durationMin,
+  booked,
+  now = new Date(),
+}: {
+  date: Date;
+  durationMin: number;
+  booked: BookedSlot[];
+  now?: Date;
+}): string[] {
   const dayOfWeek = date.getDay();
   const schedule = SCHEDULE[dayOfWeek];
   if (!schedule) return [];
 
   const openMin = timeToMinutes(schedule.open);
   const closeMin = timeToMinutes(schedule.close);
-  const now = new Date();
   const minAdvance = addMinutes(now, BOOKING.minAdvanceHours * 60);
   const maxAdvance = addMinutes(now, BOOKING.maxAdvanceDays * 24 * 60);
 
   if (isAfter(startOfDay(date), maxAdvance)) return [];
-
-  // Obtener citas del día para bloquear slots
-  const dayStart = startOfDay(date);
-  const dayEnd = addMinutes(dayStart, 24 * 60);
-
-  const booked = await prisma.appointment.findMany({
-    where: {
-      startsAt: { gte: dayStart, lt: dayEnd },
-      status: { notIn: ["CANCELLED"] },
-    },
-    select: { startsAt: true, endsAt: true },
-  });
 
   const slots: string[] = [];
 
@@ -58,10 +63,8 @@ export async function getAvailableSlots(
     const slotStartTime = slotStart(date, minutesToTime(min));
     const slotEndTime = addMinutes(slotStartTime, durationMin + BOOKING.bufferMinutes);
 
-    // Antelación mínima
     if (isBefore(slotStartTime, minAdvance)) continue;
 
-    // Comprobar colisión con citas existentes
     const hasConflict = booked.some((appt) => {
       const apptStart = new Date(appt.startsAt);
       const apptEnd = addMinutes(new Date(appt.endsAt), BOOKING.bufferMinutes);
@@ -74,4 +77,19 @@ export async function getAvailableSlots(
   }
 
   return slots;
+}
+
+export async function getAvailableSlots(date: Date, durationMin: number): Promise<string[]> {
+  const dayStart = startOfDay(date);
+  const dayEnd = addMinutes(dayStart, 24 * 60);
+
+  const booked = await prisma.appointment.findMany({
+    where: {
+      startsAt: { gte: dayStart, lt: dayEnd },
+      status: { notIn: ["CANCELLED"] },
+    },
+    select: { startsAt: true, endsAt: true },
+  });
+
+  return computeAvailableSlots({ date, durationMin, booked });
 }

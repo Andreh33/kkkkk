@@ -1,54 +1,29 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 
 const VIDEO_MP4 = "/video/video.mp4";
-const POSTER =
-  "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1920&q=80";
 
 export function HeroVideo() {
-  const prefersReducedMotion = useReducedMotion();
-  const [saveData, setSaveData] = useState(false);
-
-  useEffect(() => {
-    const conn = (navigator as unknown as { connection?: { saveData?: boolean } }).connection;
-    if (conn?.saveData) setSaveData(true);
-  }, []);
-
-  const showVideo = !prefersReducedMotion && !saveData;
-
   return (
-    <section className="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
-      {/* Fondo vídeo o imagen */}
+    <section className="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden bg-[var(--bg-deep)]">
+      {/* Vídeo de fondo */}
       <div className="absolute inset-0">
-        {showVideo ? (
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            poster={POSTER}
-            className="w-full h-full object-cover"
-            aria-hidden
-          >
-            <source src={VIDEO_MP4} type="video/mp4" />
-          </video>
-        ) : (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={POSTER}
-            alt=""
-            aria-hidden
-            className="w-full h-full object-cover"
-          />
-        )}
-        {/* Overlay */}
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          className="w-full h-full object-cover"
+          aria-hidden
+        >
+          <source src={VIDEO_MP4} type="video/mp4" />
+        </video>
         <div className="absolute inset-0 hero-overlay" aria-hidden />
       </div>
 

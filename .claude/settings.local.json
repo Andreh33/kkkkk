@@ -45,7 +45,9 @@
       "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} blog post\\\\n\" https://formaylinea.vercel.app/blog/cuidados-de-la-piel-rutina-esencial)",
       "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} video\\\\n\" https://formaylinea.vercel.app/video/video.mp4)",
       "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} admin/productos/nuevo \\(sin sesion -> 307\\)\\\\n\" https://formaylinea.vercel.app/admin/productos/nuevo)",
-      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} servicios admin \\(sin sesion -> 307\\)\\\\n\" https://formaylinea.vercel.app/admin/servicios/nuevo)"
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} servicios admin \\(sin sesion -> 307\\)\\\\n\" https://formaylinea.vercel.app/admin/servicios/nuevo)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} uploadthing api\\\\n\" https://formaylinea.vercel.app/api/uploadthing)",
+      "Bash(npx vitest *)"
     ]
   }
 }

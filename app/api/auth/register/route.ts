@@ -1,7 +1,9 @@
 import bcrypt from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
 
+import WelcomeEmail from "@/emails/WelcomeEmail";
 import { prisma } from "@/lib/db";
+import { EMAIL_FROM, getResend } from "@/lib/email";
 import { registerSchema } from "@/lib/schemas/auth";
 
 export async function POST(req: NextRequest) {
@@ -25,6 +27,19 @@ export async function POST(req: NextRequest) {
     await prisma.user.create({
       data: { name, email, phone, passwordHash },
     });
+
+    if (process.env.RESEND_API_KEY) {
+      try {
+        await getResend().emails.send({
+          from: EMAIL_FROM,
+          to: email,
+          subject: `¡Bienvenida a Forma y Línea, ${name}!`,
+          react: WelcomeEmail({ name }),
+        });
+      } catch (e) {
+        console.error("Welcome email failed:", e);
+      }
+    }
 
     return NextResponse.json({ ok: true }, { status: 201 });
   } catch (error) {

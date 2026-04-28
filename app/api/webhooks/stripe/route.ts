@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import type Stripe from "stripe";
 
+import OrderConfirmationEmail from "@/emails/OrderConfirmationEmail";
 import { prisma } from "@/lib/db";
+import { EMAIL_FROM, getResend } from "@/lib/email";
 import { getStripe } from "@/lib/stripe";
 
 export async function POST(req: NextRequest) {
@@ -71,6 +73,34 @@ export async function POST(req: NextRequest) {
                   redeemed: false,
                 },
               });
+            }
+          }
+        }
+
+        // Email de confirmación
+        if (process.env.RESEND_API_KEY) {
+          const user = await prisma.user.findUnique({ where: { id: userId } });
+          if (user?.email) {
+            try {
+              await getResend().emails.send({
+                from: EMAIL_FROM,
+                to: user.email,
+                subject: `Confirmación de tu pedido #${order.id.slice(-8)}`,
+                react: OrderConfirmationEmail({
+                  name: user.name ?? "",
+                  orderId: order.id,
+                  items: order.items.map((i) => ({
+                    name: i.name,
+                    quantity: i.quantity,
+                    unitPrice: i.unitPrice,
+                  })),
+                  subtotal: order.subtotal,
+                  shipping: order.shipping,
+                  total: order.total,
+                }),
+              });
+            } catch (e) {
+              console.error("Order email failed:", e);
             }
           }
         }

@@ -2,9 +2,12 @@ import { addMinutes } from "date-fns";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
+import AppointmentConfirmationEmail from "@/emails/AppointmentConfirmationEmail";
 import { auth } from "@/lib/auth";
 import { getAvailableSlots } from "@/lib/availability";
 import { prisma } from "@/lib/db";
+import { EMAIL_FROM, getResend } from "@/lib/email";
+import { generateICS } from "@/lib/ics";
 
 const createSchema = z.object({
   creditId: z.string(),
@@ -87,6 +90,40 @@ export async function POST(req: NextRequest) {
         data: { redeemed: true },
       }),
     ]);
+
+    if (process.env.RESEND_API_KEY && session.user.email) {
+      try {
+        const ics = generateICS({
+          uid: appointment.id,
+          title: `Forma y Línea — ${credit.service.name}`,
+          description: `Cita de ${credit.service.name}. Pasaje Dulcinea del Toboso 3, Ciudad Real.`,
+          location: "Pasaje Dulcinea del Toboso 3, 13001 Ciudad Real",
+          startsAt: startsAtDate,
+          endsAt,
+        });
+        await getResend().emails.send({
+          from: EMAIL_FROM,
+          to: session.user.email,
+          subject: `Tu cita de ${credit.service.name} está confirmada`,
+          react: AppointmentConfirmationEmail({
+            name: session.user.name ?? "",
+            serviceName: credit.service.name,
+            startsAt: startsAtDate,
+            endsAt,
+            durationMin: credit.service.durationMin,
+          }),
+          attachments: [
+            {
+              filename: "cita-forma-y-linea.ics",
+              content: Buffer.from(ics).toString("base64"),
+              contentType: "text/calendar; charset=utf-8",
+            },
+          ],
+        });
+      } catch (e) {
+        console.error("Appointment email failed:", e);
+      }
+    }
 
     return NextResponse.json({ appointment }, { status: 201 });
   } catch (error) {
