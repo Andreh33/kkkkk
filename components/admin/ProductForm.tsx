@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { extractError } from "@/lib/api-error";
 import { slugify } from "@/lib/utils";
 
 interface ProductFormProps {
@@ -88,9 +89,9 @@ export function ProductForm({ product }: ProductFormProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
+      const payload = await res.json().catch(() => ({}));
       if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        throw new Error(err.error ?? "Error al guardar");
+        throw new Error(extractError(payload, "Error al guardar"));
       }
       toast.success(isEdit ? "Producto actualizado" : "Producto creado");
       router.push("/admin/productos");

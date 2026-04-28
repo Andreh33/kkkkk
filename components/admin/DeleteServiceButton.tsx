@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
+import { extractError } from "@/lib/api-error";
+
 interface DeleteServiceButtonProps {
   id: string;
   name: string;
@@ -19,11 +21,11 @@ export function DeleteServiceButton({ id, name }: DeleteServiceButtonProps) {
     setBusy(true);
     try {
       const res = await fetch(`/api/admin/servicios/${id}`, { method: "DELETE" });
+      const payload = await res.json().catch(() => ({}));
       if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        throw new Error(err.error ?? "No se pudo eliminar");
+        throw new Error(extractError(payload, "No se pudo eliminar"));
       }
-      toast.success("Servicio eliminado");
+      toast.success(payload.softDeleted ? "Servicio desactivado (tiene citas asociadas)" : "Servicio eliminado");
       router.refresh();
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Error al eliminar");

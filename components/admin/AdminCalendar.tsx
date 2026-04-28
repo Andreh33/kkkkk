@@ -21,26 +21,21 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-
-interface CalendarEvent {
-  id: string;
-  title: string;
-  start: string;
-  end: string;
-  backgroundColor: string;
-  borderColor: string;
-  extendedProps: {
-    status: string;
-    adminNotes?: string;
-    userName: string;
-    serviceName: string;
-  };
-}
+import { extractError } from "@/lib/api-error";
 
 interface ServiceOption {
   id: string;
   name: string;
   durationMin: number;
+}
+
+interface AppointmentDetail {
+  id: string;
+  status: string;
+  adminNotes?: string;
+  userName: string;
+  serviceName: string;
+  start: string;
 }
 
 const STATUS_COLORS: Record<string, string> = {
@@ -54,17 +49,14 @@ const STATUS_COLORS: Record<string, string> = {
 const STATUSES = ["PENDING", "CONFIRMED", "COMPLETED", "NO_SHOW", "CANCELLED"] as const;
 
 function isoLocal(d: Date) {
-  // Format Date as "YYYY-MM-DDTHH:mm" for datetime-local inputs
   const pad = (n: number) => String(n).padStart(2, "0");
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
 export function AdminCalendar() {
-  const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [services, setServices] = useState<ServiceOption[]>([]);
   const calendarRef = useRef<FullCalendar | null>(null);
 
-  // Create modal
   const [createOpen, setCreateOpen] = useState(false);
   const [serviceId, setServiceId] = useState("");
   const [startsAt, setStartsAt] = useState(isoLocal(new Date()));
@@ -75,51 +67,20 @@ export function AdminCalendar() {
   const [status, setStatus] = useState<typeof STATUSES[number]>("CONFIRMED");
   const [saving, setSaving] = useState(false);
 
-  // Detail modal
-  const [detail, setDetail] = useState<CalendarEvent | null>(null);
+  const [detail, setDetail] = useState<AppointmentDetail | null>(null);
 
   useEffect(() => {
     fetch("/api/admin/appointments/services")
       .then((r) => r.json())
-      .then((d) => setServices(d.services ?? []))
+      .then((d) => {
+        const list: ServiceOption[] = d.services ?? [];
+        setServices(list);
+      })
       .catch(() => {});
   }, []);
 
-  async function loadEvents(info: { startStr: string; endStr: string }) {
-    const res = await fetch(`/api/appointments?start=${info.startStr}&end=${info.endStr}`);
-    if (!res.ok) return;
-    const data = await res.json();
-    const mapped: CalendarEvent[] = (data.appointments ?? []).map((a: {
-      id: string;
-      user: { name: string };
-      service: { name: string };
-      startsAt: string;
-      endsAt: string;
-      status: string;
-      adminNotes?: string;
-    }) => ({
-      id: a.id,
-      title: `${a.user.name} — ${a.service.name}`,
-      start: a.startsAt,
-      end: a.endsAt,
-      backgroundColor: STATUS_COLORS[a.status] ?? "#B89968",
-      borderColor: STATUS_COLORS[a.status] ?? "#B89968",
-      extendedProps: {
-        status: a.status,
-        adminNotes: a.adminNotes,
-        userName: a.user.name,
-        serviceName: a.service.name,
-      },
-    }));
-    setEvents(mapped);
-  }
-
   function refresh() {
     calendarRef.current?.getApi().refetchEvents();
-    const view = calendarRef.current?.getApi().view;
-    if (view) {
-      void loadEvents({ startStr: view.activeStart.toISOString(), endStr: view.activeEnd.toISOString() });
-    }
   }
 
   function resetCreateForm(prefillStart?: Date) {
@@ -161,13 +122,20 @@ export function AdminCalendar() {
           adminNotes: adminNotes || undefined,
         }),
       });
+      const payload = await res.json().catch(() => ({}));
       if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        throw new Error(err.error ?? "Error al crear");
+        throw new Error(extractError(payload, "Error al crear la cita"));
       }
       toast.success("Cita creada");
       setCreateOpen(false);
-      refresh();
+
+      // Navegar a la fecha de la cita y forzar recarga
+      const apptDate = new Date(startsAt);
+      const api = calendarRef.current?.getApi();
+      if (api) {
+        api.gotoDate(apptDate);
+        api.refetchEvents();
+      }
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Error al crear");
     } finally {
@@ -181,27 +149,30 @@ export function AdminCalendar() {
     }
     try {
       const res = await fetch(`/api/appointments/${id}`, { method: "DELETE" });
-      if (!res.ok) throw new Error();
+      const payload = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(extractError(payload, "Error al eliminar"));
       toast.success("Cita eliminada");
       setDetail(null);
       refresh();
-    } catch {
-      toast.error("Error al eliminar");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Error al eliminar");
     }
   }
 
   async function updateStatus(id: string, newStatus: string) {
-    const res = await fetch(`/api/appointments/${id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status: newStatus }),
-    });
-    if (res.ok) {
+    try {
+      const res = await fetch(`/api/appointments/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: newStatus }),
+      });
+      const payload = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(extractError(payload, "Error al actualizar"));
       toast.success("Estado actualizado");
       setDetail(null);
       refresh();
-    } else {
-      toast.error("Error al actualizar");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Error al actualizar");
     }
   }
 
@@ -216,7 +187,8 @@ export function AdminCalendar() {
     });
     if (!res.ok) {
       info.revert();
-      toast.error("No se pudo mover la cita.");
+      const payload = await res.json().catch(() => ({}));
+      toast.error(extractError(payload, "No se pudo mover la cita"));
     } else {
       toast.success("Cita movida correctamente.");
       refresh();
@@ -242,8 +214,37 @@ export function AdminCalendar() {
             center: "title",
             right: "dayGridMonth,timeGridWeek,timeGridDay",
           }}
-          events={events}
-          datesSet={loadEvents}
+          events={async (info, success, failure) => {
+            try {
+              const res = await fetch(`/api/appointments?start=${info.startStr}&end=${info.endStr}`);
+              const data = await res.json();
+              const mapped = (data.appointments ?? []).map((a: {
+                id: string;
+                user: { name: string };
+                service: { name: string };
+                startsAt: string;
+                endsAt: string;
+                status: string;
+                adminNotes?: string;
+              }) => ({
+                id: a.id,
+                title: `${a.user.name} — ${a.service.name}`,
+                start: a.startsAt,
+                end: a.endsAt,
+                backgroundColor: STATUS_COLORS[a.status] ?? "#B89968",
+                borderColor: STATUS_COLORS[a.status] ?? "#B89968",
+                extendedProps: {
+                  status: a.status,
+                  adminNotes: a.adminNotes,
+                  userName: a.user.name,
+                  serviceName: a.service.name,
+                },
+              }));
+              success(mapped);
+            } catch (e) {
+              failure(e as Error);
+            }
+          }}
           editable
           selectable
           eventDrop={handleEventDrop}
@@ -255,12 +256,11 @@ export function AdminCalendar() {
           eventClick={(info) => {
             setDetail({
               id: info.event.id,
-              title: info.event.title,
+              status: info.event.extendedProps.status,
+              adminNotes: info.event.extendedProps.adminNotes,
+              userName: info.event.extendedProps.userName,
+              serviceName: info.event.extendedProps.serviceName,
               start: info.event.startStr,
-              end: info.event.endStr,
-              backgroundColor: info.event.backgroundColor,
-              borderColor: info.event.borderColor,
-              extendedProps: info.event.extendedProps as CalendarEvent["extendedProps"],
             });
           }}
         />
@@ -359,16 +359,16 @@ export function AdminCalendar() {
           {detail && (
             <>
               <DialogHeader>
-                <DialogTitle>{detail.extendedProps.serviceName}</DialogTitle>
+                <DialogTitle>{detail.serviceName}</DialogTitle>
                 <DialogDescription>
-                  {detail.extendedProps.userName} · {new Date(detail.start).toLocaleString("es-ES")}
+                  {detail.userName} · {new Date(detail.start).toLocaleString("es-ES")}
                 </DialogDescription>
               </DialogHeader>
               <div className="space-y-3">
                 <div>
                   <Label>Estado</Label>
                   <select
-                    value={detail.extendedProps.status}
+                    value={detail.status}
                     onChange={(e) => updateStatus(detail.id, e.target.value)}
                     className="mt-1 w-full rounded-md border border-[var(--line)] bg-[var(--bg-white)] px-3 py-2 text-sm"
                   >
@@ -379,11 +379,11 @@ export function AdminCalendar() {
                     ))}
                   </select>
                 </div>
-                {detail.extendedProps.adminNotes && (
+                {detail.adminNotes && (
                   <div>
                     <Label>Notas internas</Label>
                     <p className="text-sm text-[var(--text-soft)] mt-1 whitespace-pre-wrap">
-                      {detail.extendedProps.adminNotes}
+                      {detail.adminNotes}
                     </p>
                   </div>
                 )}
