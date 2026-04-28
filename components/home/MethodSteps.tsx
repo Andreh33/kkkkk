@@ -27,8 +27,8 @@ const STEPS = [
 export function MethodSteps() {
   return (
     <section className="relative py-20 sm:py-28 px-4 sm:px-6 bg-[var(--bg-base)] overflow-hidden">
-      <LeafBranch className="absolute -top-4 left-4 w-32 sm:w-40 opacity-25" color="sage" />
-      <LeafBranch className="absolute -bottom-4 right-4 w-32 sm:w-40 opacity-25 rotate-180" color="gold" />
+      <LeafBranch className="absolute top-2 left-4 w-48 sm:w-60 opacity-70" color="sage" />
+      <LeafBranch className="absolute bottom-2 right-4 w-48 sm:w-60 opacity-70 rotate-180" color="gold" />
       <div className="max-w-5xl mx-auto relative">
         <motion.div
           initial={{ opacity: 0, y: 12 }}

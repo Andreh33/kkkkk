@@ -7,9 +7,7 @@ import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 
-// Vídeo de fondo (stock libre de Pexels — sustituir por grabación profesional del centro)
-const VIDEO_MP4 =
-  "https://videos.pexels.com/video-files/3997798/3997798-uhd_2560_1440_25fps.mp4";
+const VIDEO_MP4 = "/video/video.mp4";
 const POSTER =
   "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1920&q=80";
 

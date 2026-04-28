@@ -30,8 +30,8 @@ export default function QuienSoyPage() {
     <div className="pt-20">
       {/* Hero pequeño */}
       <section className="relative bg-[var(--bg-deep)] py-20 sm:py-28 overflow-hidden">
-        <FloralCorner className="absolute top-0 left-0 w-32 opacity-40" color="gold" />
-        <FloralCorner className="absolute bottom-0 right-0 w-32 opacity-40" color="gold" flip />
+        <FloralCorner className="absolute top-0 left-0 w-48 sm:w-64 opacity-80" color="gold" />
+        <FloralCorner className="absolute bottom-0 right-0 w-48 sm:w-64 opacity-80" color="gold" flip />
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
           <p className="text-[var(--gold-700)] text-xs tracking-[0.3em] uppercase font-medium mb-3">
             Directora

@@ -11,8 +11,8 @@ import { Button } from "@/components/ui/button";
 export function WelcomeBlock() {
   return (
     <section className="relative py-20 sm:py-28 px-4 sm:px-6 bg-[var(--bg-white)] overflow-hidden">
-      <LeafBranch className="absolute top-10 right-0 w-40 sm:w-56 opacity-30 rotate-12" color="gold" />
-      <LeafBranch className="absolute bottom-10 left-0 w-40 sm:w-56 opacity-25 -rotate-12" color="sage" />
+      <LeafBranch className="absolute top-10 right-0 w-56 sm:w-72 opacity-70 rotate-12" color="gold" />
+      <LeafBranch className="absolute bottom-10 left-0 w-56 sm:w-72 opacity-60 -rotate-12" color="sage" />
       <div className="max-w-6xl mx-auto relative">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Foto */}

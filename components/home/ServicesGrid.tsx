@@ -42,8 +42,8 @@ const SERVICES = [
 export function ServicesGrid() {
   return (
     <section className="relative py-20 sm:py-28 px-4 sm:px-6 bg-[var(--bg-cream)] overflow-hidden">
-      <FloralCorner className="absolute top-0 left-0 w-32 sm:w-44 opacity-40" />
-      <FloralCorner className="absolute top-0 right-0 w-32 sm:w-44 opacity-40" flip />
+      <FloralCorner className="absolute top-0 left-0 w-44 sm:w-64 opacity-80" />
+      <FloralCorner className="absolute top-0 right-0 w-44 sm:w-64 opacity-80" flip />
       <div className="max-w-7xl mx-auto relative">
         <motion.div
           initial={{ opacity: 0, y: 12 }}
