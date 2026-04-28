@@ -15,28 +15,28 @@ const CATEGORIES = [
     description:
       "Desde el clásico aroma masaje hasta el lomi-lomi hawaiano. Técnicas orientales y occidentales para liberar tensión y reconectar con tu cuerpo.",
     href: "/servicios/masajes",
-    image: "/hero/hero-poster.jpg",
+    image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1200&q=80",
   },
   {
     title: "Medicina Estética",
     description:
       "Tratamientos no invasivos de última generación: HIFU, hilos tensores, rellenos y neuromoduladores. Resultados naturales y duraderos.",
     href: "/servicios/medicina-estetica",
-    image: "/hero/hero-poster.jpg",
+    image: "https://images.unsplash.com/photo-1612817288484-6f916006741a?auto=format&fit=crop&w=1200&q=80",
   },
   {
     title: "Tratamientos Faciales",
     description:
       "Limpiezas profundas, peelings químicos y tecnología avanzada para lucir una piel sana y luminosa a cualquier edad.",
     href: "/servicios/tratamientos-faciales",
-    image: "/hero/hero-poster.jpg",
+    image: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1200&q=80",
   },
   {
     title: "Tratamientos Corporales",
     description:
       "Modelado, reafirmación y reducción de grasa localizada con los métodos más efectivos. 35 años avalan nuestros resultados.",
     href: "/servicios/tratamientos-corporales",
-    image: "/hero/hero-poster.jpg",
+    image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=1200&q=80",
   },
 ];
 

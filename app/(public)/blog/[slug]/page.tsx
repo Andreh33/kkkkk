@@ -82,11 +82,15 @@ export default async function BlogPostPage({ params }: Props) {
           {/* Contenido */}
           <div
             className="prose prose-lg max-w-none
-              prose-headings:font-display prose-headings:text-[var(--text-strong)]
-              prose-p:text-[var(--text-soft)] prose-p:leading-relaxed
-              prose-a:text-[var(--gold-700)] prose-a:no-underline hover:prose-a:underline
-              prose-strong:text-[var(--text-base)]
-              prose-ul:text-[var(--text-soft)] prose-li:marker:text-[var(--gold-500)]"
+              prose-headings:font-display prose-headings:text-[var(--text-strong)] prose-headings:tracking-tight
+              prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-5
+              prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-h3:text-[var(--gold-700)] prose-h3:font-semibold
+              prose-p:text-[var(--text-base)] prose-p:leading-[1.8] prose-p:font-body prose-p:text-[1.0625rem]
+              prose-a:text-[var(--gold-700)] prose-a:font-medium prose-a:no-underline hover:prose-a:underline
+              prose-strong:text-[var(--text-strong)] prose-strong:font-semibold
+              prose-em:text-[var(--text-base)]
+              prose-ul:text-[var(--text-base)] prose-ul:leading-[1.8] prose-li:marker:text-[var(--gold-500)] prose-li:my-2
+              prose-blockquote:border-l-[var(--gold-500)] prose-blockquote:text-[var(--text-soft)] prose-blockquote:font-display prose-blockquote:not-italic"
             dangerouslySetInnerHTML={{ __html: post.contentMdx }}
           />
         </div>

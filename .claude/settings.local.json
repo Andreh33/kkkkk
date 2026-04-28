@@ -37,7 +37,9 @@
       "Bash(git commit -m 'Remove .env.production from repo \\(contained DB credentials\\) *)",
       "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} home\\\\n\" https://formaylinea.vercel.app/)",
       "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} quien-soy\\\\n\" https://formaylinea.vercel.app/quien-soy)",
-      "Bash(curl -s https://formaylinea.vercel.app/)"
+      "Bash(curl -s https://formaylinea.vercel.app/)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} login\\\\n\" https://formaylinea.vercel.app/login)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} admin \\(sin sesion -> 307\\)\\\\n\" https://formaylinea.vercel.app/admin)"
     ]
   }
 }

@@ -4,6 +4,7 @@ import {
   Calendar,
   FileText,
   LayoutDashboard,
+  LogOut,
   MessageSquare,
   Package,
   ShoppingBag,
@@ -13,6 +14,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { signOut } from "next-auth/react";
 
 import { cn } from "@/lib/utils";
 
@@ -66,13 +68,20 @@ export function AdminSidebar() {
         })}
       </nav>
 
-      <div className="pt-4 border-t border-white/10">
+      <div className="pt-4 border-t border-white/10 space-y-1">
         <Link
           href="/"
           className="flex items-center gap-2 px-3 py-2 text-xs text-[var(--text-mute)] hover:text-white transition-colors"
         >
           ← Ver sitio web
         </Link>
+        <button
+          type="button"
+          onClick={() => signOut({ callbackUrl: "/" })}
+          className="w-full flex items-center gap-2 px-3 py-2 text-xs text-[var(--text-mute)] hover:text-white transition-colors text-left"
+        >
+          <LogOut className="h-3.5 w-3.5" /> Cerrar sesión
+        </button>
       </div>
     </aside>
   );

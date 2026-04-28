@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
@@ -103,8 +104,14 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 bg-[var(--bg-cream)]">
+    <div className="min-h-screen flex items-center justify-center px-4 bg-[var(--bg-cream)] py-12">
       <div className="w-full max-w-md">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 text-sm text-[var(--text-soft)] hover:text-[var(--gold-700)] transition-colors mb-6"
+        >
+          <ArrowLeft className="h-4 w-4" /> Volver a la web
+        </Link>
         <Suspense>
           <LoginForm />
         </Suspense>

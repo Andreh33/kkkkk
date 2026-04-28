@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -50,8 +51,14 @@ export default function RecuperarPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 bg-[var(--bg-cream)]">
+    <div className="min-h-screen flex items-center justify-center px-4 bg-[var(--bg-cream)] py-12">
       <div className="w-full max-w-md">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 text-sm text-[var(--text-soft)] hover:text-[var(--gold-700)] transition-colors mb-6"
+        >
+          <ArrowLeft className="h-4 w-4" /> Volver a la web
+        </Link>
         <div className="bg-[var(--bg-white)] rounded-2xl border border-[var(--line)] p-8">
           <div className="text-center mb-8">
             <h1 className="font-display text-3xl text-[var(--text-strong)]">

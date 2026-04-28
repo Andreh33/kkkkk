@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
@@ -12,15 +13,22 @@ export const metadata: Metadata = {
 export default function TratamientosFacialesPage() {
   return (
     <div className="pt-20">
-      <section className="bg-[var(--bg-deep)] py-20 sm:py-28">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
-          <p className="text-[var(--gold-700)] text-xs tracking-[0.3em] uppercase font-medium mb-3">
+      <section className="relative h-[50vh] min-h-[360px] flex items-center justify-center overflow-hidden">
+        <Image
+          src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1920&q=80"
+          alt="Tratamientos faciales en Forma y Línea Ciudad Real"
+          fill
+          className="object-cover"
+          priority
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-black/50" />
+        <div className="relative max-w-3xl mx-auto px-4 sm:px-6 text-center">
+          <p className="text-[var(--gold-300)] text-xs tracking-[0.3em] uppercase font-medium mb-3">
             Tu piel merece lo mejor
           </p>
-          <h1 className="font-display text-display-lg text-[var(--text-strong)]">
-            Tratamientos Faciales
-          </h1>
-          <p className="text-body text-[var(--text-soft)] mt-4 max-w-xl mx-auto">
+          <h1 className="font-display text-display-lg text-white">Tratamientos Faciales</h1>
+          <p className="text-body text-white/85 mt-4 max-w-xl mx-auto">
             Desde limpiezas profundas hasta tecnología de última generación. María José y su equipo
             diseñarán el protocolo perfecto para tu tipo de piel.
           </p>

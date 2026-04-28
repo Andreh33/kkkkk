@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
@@ -129,15 +130,22 @@ export default function MedicinaEsteticaPage() {
   return (
     <div className="pt-20">
       {/* Hero */}
-      <section className="bg-[var(--bg-deep)] py-20 sm:py-28">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
-          <p className="text-[var(--gold-700)] text-xs tracking-[0.3em] uppercase font-medium mb-3">
+      <section className="relative h-[50vh] min-h-[360px] flex items-center justify-center overflow-hidden">
+        <Image
+          src="https://images.unsplash.com/photo-1612817288484-6f916006741a?auto=format&fit=crop&w=1920&q=80"
+          alt="Medicina estética en Forma y Línea Ciudad Real"
+          fill
+          className="object-cover"
+          priority
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-black/50" />
+        <div className="relative max-w-3xl mx-auto px-4 sm:px-6 text-center">
+          <p className="text-[var(--gold-300)] text-xs tracking-[0.3em] uppercase font-medium mb-3">
             Sin bisturí
           </p>
-          <h1 className="font-display text-display-lg text-[var(--text-strong)]">
-            Medicina Estética
-          </h1>
-          <p className="text-body text-[var(--text-soft)] mt-4 max-w-xl mx-auto">
+          <h1 className="font-display text-display-lg text-white">Medicina Estética</h1>
+          <p className="text-body text-white/85 mt-4 max-w-xl mx-auto">
             Tratamientos no invasivos de última generación realizados por profesionales
             cualificados. Resultados naturales y duraderos.
           </p>

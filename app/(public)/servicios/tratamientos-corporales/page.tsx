@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
@@ -12,15 +13,22 @@ export const metadata: Metadata = {
 export default function TratamientosCorporalesPage() {
   return (
     <div className="pt-20">
-      <section className="bg-[var(--bg-deep)] py-20 sm:py-28">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
-          <p className="text-[var(--gold-700)] text-xs tracking-[0.3em] uppercase font-medium mb-3">
+      <section className="relative h-[50vh] min-h-[360px] flex items-center justify-center overflow-hidden">
+        <Image
+          src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=1920&q=80"
+          alt="Tratamientos corporales en Forma y Línea Ciudad Real"
+          fill
+          className="object-cover"
+          priority
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-black/50" />
+        <div className="relative max-w-3xl mx-auto px-4 sm:px-6 text-center">
+          <p className="text-[var(--gold-300)] text-xs tracking-[0.3em] uppercase font-medium mb-3">
             35 años de resultados
           </p>
-          <h1 className="font-display text-display-lg text-[var(--text-strong)]">
-            Tratamientos Corporales
-          </h1>
-          <p className="text-body text-[var(--text-soft)] mt-4 max-w-xl mx-auto">
+          <h1 className="font-display text-display-lg text-white">Tratamientos Corporales</h1>
+          <p className="text-body text-white/85 mt-4 max-w-xl mx-auto">
             Nuestro origen. El método Forma y Línea ha ayudado a adelgazar a más de 70.000
             personas combinando tecnología avanzada y métodos naturales.
           </p>

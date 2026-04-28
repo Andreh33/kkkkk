@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { Clock } from "lucide-react";
 
 import { LineDivider } from "@/components/decor/LineDivider";
@@ -21,6 +22,7 @@ const MASSAGES = [
       "Un viaje sensorial de profunda relajación. Aceites esenciales seleccionados envuelven tu cuerpo mientras técnicas de effleurage y petrissage liberan la tensión acumulada. Ideal para el estrés y la fatiga.",
     variants: null,
     slug: "aroma-masaje",
+    image: "https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80",
   },
   {
     name: "Foot Massage",
@@ -34,6 +36,7 @@ const MASSAGES = [
       { label: "45 min", price: 60 },
     ],
     slug: "foot-massage",
+    image: "https://images.unsplash.com/photo-1519415943484-9fa1873496d4?auto=format&fit=crop&w=900&q=80",
   },
   {
     name: "Masaje a 4 Manos",
@@ -44,6 +47,7 @@ const MASSAGES = [
       "Dos terapeutas, cuatro manos, un solo ritmo. Esta experiencia de sincronía perfecta multiplica la sensación de bienestar y desconexión total.",
     variants: null,
     slug: "masaje-4-manos",
+    image: "https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80",
   },
   {
     name: "Masaje Balinés",
@@ -57,6 +61,7 @@ const MASSAGES = [
       { label: "90 min", price: 90 },
     ],
     slug: "masaje-balinees",
+    image: "https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80",
   },
   {
     name: "Breves Delicias",
@@ -67,6 +72,7 @@ const MASSAGES = [
       "El placer en formato exprés. Treinta minutos de masaje enfocado en las zonas de mayor tensión: cuello, hombros y espalda alta. Perfecto para el descanso de mediodía.",
     variants: null,
     slug: "breves-delicias",
+    image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=900&q=80",
   },
   {
     name: "Him & Her (Pareja)",
@@ -80,6 +86,7 @@ const MASSAGES = [
       { label: "75 min", price: 170 },
     ],
     slug: "masaje-pareja",
+    image: "https://images.unsplash.com/photo-1545205597-3d9d02c29597?auto=format&fit=crop&w=900&q=80",
   },
   {
     name: "Masaje Lomi-Lomi",
@@ -93,6 +100,7 @@ const MASSAGES = [
       { label: "90 min", price: 90 },
     ],
     slug: "lomi-lomi",
+    image: "https://images.unsplash.com/photo-1583416750470-965b2707b355?auto=format&fit=crop&w=900&q=80",
   },
   {
     name: "Thai Herbal Masaje",
@@ -103,6 +111,7 @@ const MASSAGES = [
       "Bolsas de hierbas tailandesas calientes prensadas sobre el cuerpo. Lemongrass, cúrcuma y jengibre penetran en músculos y articulaciones, aliviando dolores y mejorando la circulación.",
     variants: null,
     slug: "thai-herbal",
+    image: "https://images.unsplash.com/photo-1615397587950-3cbb55f95b77?auto=format&fit=crop&w=900&q=80",
   },
 ];
 
@@ -110,15 +119,22 @@ export default function MasajesPage() {
   return (
     <div className="pt-20">
       {/* Hero */}
-      <section className="bg-[var(--bg-deep)] py-20 sm:py-28">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
-          <p className="text-[var(--gold-700)] text-xs tracking-[0.3em] uppercase font-medium mb-3">
+      <section className="relative h-[50vh] min-h-[360px] flex items-center justify-center overflow-hidden">
+        <Image
+          src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1920&q=80"
+          alt="Masajes en Forma y Línea Ciudad Real"
+          fill
+          className="object-cover"
+          priority
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-black/50" />
+        <div className="relative max-w-3xl mx-auto px-4 sm:px-6 text-center">
+          <p className="text-[var(--gold-300)] text-xs tracking-[0.3em] uppercase font-medium mb-3">
             Spa & Bienestar
           </p>
-          <h1 className="font-display text-display-lg text-[var(--text-strong)]">
-            Masajes
-          </h1>
-          <p className="text-body text-[var(--text-soft)] mt-4">
+          <h1 className="font-display text-display-lg text-white">Masajes</h1>
+          <p className="text-body text-white/85 mt-4">
             Técnicas orientales y occidentales para liberar tensión, mejorar la circulación y
             reconectar con tu bienestar.
           </p>
@@ -130,8 +146,19 @@ export default function MasajesPage() {
         <div className="max-w-5xl mx-auto space-y-12">
           {MASSAGES.map((massage, i) => (
             <div key={massage.slug}>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-10 items-start">
-                <div className="sm:col-span-2">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-10 items-start">
+                <div className="md:col-span-4">
+                  <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-[var(--bg-deep)]">
+                    <Image
+                      src={massage.image}
+                      alt={massage.name}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                    />
+                  </div>
+                </div>
+                <div className="md:col-span-5">
                   <div className="flex items-start gap-4 mb-3">
                     <h2 className="font-display text-2xl sm:text-3xl text-[var(--text-strong)]">
                       {massage.name}
@@ -150,7 +177,7 @@ export default function MasajesPage() {
                     {massage.description}
                   </p>
                 </div>
-                <div className="flex flex-col gap-3">
+                <div className="md:col-span-3 flex flex-col gap-3">
                   <div className="bg-[var(--bg-cream)] rounded-xl p-5 text-center border border-[var(--line)]">
                     <p className="font-display text-3xl text-[var(--gold-700)] font-semibold mb-1">
                       {massage.priceDisplay}
