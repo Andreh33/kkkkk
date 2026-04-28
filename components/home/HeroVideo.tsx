@@ -7,10 +7,11 @@ import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 
-// TODO: sustituir por grabación profesional del centro
-const VIDEO_MP4 = "/hero/hero.mp4";
-const VIDEO_WEBM = "/hero/hero.webm";
-const POSTER = "/hero/hero-poster.jpg";
+// Vídeo de fondo (stock libre de Pexels — sustituir por grabación profesional del centro)
+const VIDEO_MP4 =
+  "https://videos.pexels.com/video-files/3997798/3997798-uhd_2560_1440_25fps.mp4";
+const POSTER =
+  "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1920&q=80";
 
 export function HeroVideo() {
   const prefersReducedMotion = useReducedMotion();
@@ -38,7 +39,6 @@ export function HeroVideo() {
             className="w-full h-full object-cover"
             aria-hidden
           >
-            <source src={VIDEO_WEBM} type="video/webm" />
             <source src={VIDEO_MP4} type="video/mp4" />
           </video>
         ) : (

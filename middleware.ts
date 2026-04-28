@@ -1,12 +1,14 @@
-import { auth } from "@/lib/auth";
+import NextAuth from "next-auth";
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+
+import { authConfig } from "@/auth.config";
+
+const { auth } = NextAuth(authConfig);
 
 export default auth((req) => {
   const { pathname } = req.nextUrl;
   const session = req.auth;
 
-  // Protect /admin/* — requires ADMIN role
   if (pathname.startsWith("/admin")) {
     if (!session) {
       return NextResponse.redirect(
@@ -18,7 +20,6 @@ export default auth((req) => {
     }
   }
 
-  // Protect /mi-cuenta/* — requires any authenticated user
   if (pathname.startsWith("/mi-cuenta")) {
     if (!session) {
       return NextResponse.redirect(

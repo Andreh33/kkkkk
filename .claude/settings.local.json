@@ -32,7 +32,12 @@
       "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} /tienda\\\\n\" https://formaylinea.vercel.app/tienda)",
       "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} /blog\\\\n\" https://formaylinea.vercel.app/blog)",
       "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} /servicios/masajes\\\\n\" https://formaylinea.vercel.app/servicios/masajes)",
-      "Bash(git commit -m 'Make header text/logo dark and add real logo + Maria Jose photo to public/ *)"
+      "Bash(git commit -m 'Make header text/logo dark and add real logo + Maria Jose photo to public/ *)",
+      "Bash(git rm *)",
+      "Bash(git commit -m 'Remove .env.production from repo \\(contained DB credentials\\) *)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} home\\\\n\" https://formaylinea.vercel.app/)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} quien-soy\\\\n\" https://formaylinea.vercel.app/quien-soy)",
+      "Bash(curl -s https://formaylinea.vercel.app/)"
     ]
   }
 }

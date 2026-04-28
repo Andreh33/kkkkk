@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 
+import { FloralCorner } from "@/components/decor/FloralCorner";
+
 const TESTIMONIALS = [
   {
     name: "Ana García",
@@ -28,8 +30,10 @@ export function TestimonialsSlider() {
   const next = () => setCurrent((c) => (c === TESTIMONIALS.length - 1 ? 0 : c + 1));
 
   return (
-    <section className="py-20 sm:py-28 px-4 sm:px-6 bg-[var(--bg-deep)]">
-      <div className="max-w-3xl mx-auto">
+    <section className="relative py-20 sm:py-28 px-4 sm:px-6 bg-[var(--bg-deep)] overflow-hidden">
+      <FloralCorner className="absolute bottom-0 left-0 w-32 sm:w-44 opacity-30" />
+      <FloralCorner className="absolute bottom-0 right-0 w-32 sm:w-44 opacity-30" flip />
+      <div className="max-w-3xl mx-auto relative">
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}

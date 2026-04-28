@@ -2,7 +2,9 @@
 
 import { motion } from "framer-motion";
 
+import { LeafBranch } from "@/components/decor/LeafBranch";
 import { LineDivider } from "@/components/decor/LineDivider";
+import { SmallSprig } from "@/components/decor/SmallSprig";
 
 const STEPS = [
   {
@@ -24,8 +26,10 @@ const STEPS = [
 
 export function MethodSteps() {
   return (
-    <section className="py-20 sm:py-28 px-4 sm:px-6 bg-[var(--bg-base)]">
-      <div className="max-w-5xl mx-auto">
+    <section className="relative py-20 sm:py-28 px-4 sm:px-6 bg-[var(--bg-base)] overflow-hidden">
+      <LeafBranch className="absolute -top-4 left-4 w-32 sm:w-40 opacity-25" color="sage" />
+      <LeafBranch className="absolute -bottom-4 right-4 w-32 sm:w-40 opacity-25 rotate-180" color="gold" />
+      <div className="max-w-5xl mx-auto relative">
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -53,6 +57,7 @@ export function MethodSteps() {
               <p className="font-display text-[5rem] sm:text-[6rem] leading-none text-[var(--gold-300)] font-semibold mb-4 opacity-60">
                 {step.num}
               </p>
+              <SmallSprig className="mx-auto mb-3 w-10 opacity-70" />
               <h3 className="font-display text-2xl text-[var(--text-strong)] mb-3">
                 {step.title}
               </h3>

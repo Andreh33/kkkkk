@@ -7,6 +7,7 @@ import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
+import { LogoutButton } from "@/components/layout/LogoutButton";
 
 const NAV = [
   { href: "/mi-cuenta", label: "Dashboard", icon: Home },
@@ -43,7 +44,19 @@ export default async function AccountLayout({ children }: { children: React.Reac
                       {label}
                     </Link>
                   ))}
+                  {session.user.role === "ADMIN" && (
+                    <Link
+                      href="/admin"
+                      className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[var(--gold-700)] hover:bg-[var(--bg-cream)] font-medium transition-colors"
+                    >
+                      <Home className="h-4 w-4 flex-shrink-0" />
+                      Panel admin
+                    </Link>
+                  )}
                 </nav>
+                <div className="mt-3 pt-3 border-t border-[var(--line)]">
+                  <LogoutButton />
+                </div>
               </div>
             </aside>
             {/* Main */}
